@@ -1,11 +1,10 @@
 package br.dev.rvz.forum.services
 
-import br.dev.rvz.forum.mappers.TopicRequestMapper
-import br.dev.rvz.forum.mappers.TopicResponseListMapper
-import br.dev.rvz.forum.mappers.TopicResponseMapper
+import br.dev.rvz.forum.mappers.topics.TopicRequestMapper
+import br.dev.rvz.forum.mappers.topics.TopicResponseListMapper
 import br.dev.rvz.forum.models.*
-import br.dev.rvz.forum.models.dto.TopicRequestDTO
-import br.dev.rvz.forum.models.dto.TopicResponseDTO
+import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
+import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime
 class TopicService(
     private var topics: List<Topic>,
     private val topicRequestMapper: TopicRequestMapper,
-    private val topicResponseMapper: TopicResponseMapper,
     private val topicResponseListMapper: TopicResponseListMapper
 ) {
 
@@ -28,7 +26,7 @@ class TopicService(
             dateTimeCreated = LocalDateTime.now(),
             course = course,
             author = user,
-            responses = listOf(),
+            responses = mutableListOf(),
             status = StatusTopic.NO_RESPONSE
         )
 
@@ -47,7 +45,7 @@ class TopicService(
             dateTimeCreated = LocalDateTime.now(),
             course = course,
             author = user,
-            responses = listOf(responses),
+            responses = mutableListOf(responses),
             status = StatusTopic.NO_RESPONSE
         )
 
@@ -58,7 +56,7 @@ class TopicService(
             dateTimeCreated = LocalDateTime.now(),
             course = course,
             author = user,
-            responses = listOf(responses),
+            responses = mutableListOf(responses),
             status = StatusTopic.NO_RESPONSE
         )
 
@@ -69,9 +67,9 @@ class TopicService(
         return topicResponseListMapper.map(topics)
     }
 
-    fun getTopicById(id: Long): TopicResponseDTO {
+    fun getTopicById(id: Long): Topic {
         val topic = topics.first { topic -> topic.id == id }
-        return topicResponseMapper.map(topic)
+        return topic
     }
 
     fun getResponseTopicByTopicId(id: Long): List<ResponseTopic> {
@@ -86,5 +84,4 @@ class TopicService(
 
         return topic
     }
-
 }

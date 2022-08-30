@@ -1,4 +1,4 @@
-package br.dev.rvz.forum.models.dto
+package br.dev.rvz.forum.models.dto.topics
 
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull

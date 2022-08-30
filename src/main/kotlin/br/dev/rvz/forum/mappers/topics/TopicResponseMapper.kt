@@ -1,7 +1,8 @@
-package br.dev.rvz.forum.mappers
+package br.dev.rvz.forum.mappers.topics
 
+import br.dev.rvz.forum.mappers.Mapper
 import br.dev.rvz.forum.models.Topic
-import br.dev.rvz.forum.models.dto.TopicResponseDTO
+import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
 import org.springframework.stereotype.Component
 
 @Component

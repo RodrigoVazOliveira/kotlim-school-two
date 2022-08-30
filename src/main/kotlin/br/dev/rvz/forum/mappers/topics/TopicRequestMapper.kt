@@ -1,8 +1,9 @@
-package br.dev.rvz.forum.mappers
+package br.dev.rvz.forum.mappers.topics
 
+import br.dev.rvz.forum.mappers.Mapper
 import br.dev.rvz.forum.models.StatusTopic
 import br.dev.rvz.forum.models.Topic
-import br.dev.rvz.forum.models.dto.TopicRequestDTO
+import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
 import br.dev.rvz.forum.services.AuthorService
 import br.dev.rvz.forum.services.CourseService
 import org.springframework.stereotype.Component
@@ -20,7 +21,7 @@ class TopicRequestMapper(
             course = courseService.findById(topicRequestDTO.idCourse),
             title = topicRequestDTO.title,
             message = topicRequestDTO.message,
-            responses = listOf(),
+            responses = mutableListOf(),
             dateTimeCreated = LocalDateTime.now(),
             id = Random.nextLong(0, 30),
             status = StatusTopic.NO_RESPONSE

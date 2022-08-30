@@ -1,9 +1,10 @@
 package br.dev.rvz.forum.controllers
 
+import br.dev.rvz.forum.mappers.topics.TopicResponseMapper
 import br.dev.rvz.forum.models.ResponseTopic
 import br.dev.rvz.forum.models.Topic
-import br.dev.rvz.forum.models.dto.TopicRequestDTO
-import br.dev.rvz.forum.models.dto.TopicResponseDTO
+import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
+import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
 import br.dev.rvz.forum.services.TopicService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,7 +13,10 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/topics")
-class TopicRestController(val topicService: TopicService) {
+class TopicRestController(
+    val topicService: TopicService,
+    private val topicResponseMapper: TopicResponseMapper,
+) {
     private val LOGGER: Logger = LoggerFactory.getLogger(this.javaClass)
 
     @GetMapping
@@ -22,7 +26,7 @@ class TopicRestController(val topicService: TopicService) {
 
     @GetMapping("/{id}")
     fun getTopicById(@PathVariable id: Long): TopicResponseDTO {
-        return topicService.getTopicById(id)
+        return topicResponseMapper.map(topicService.getTopicById(id))
     }
 
 

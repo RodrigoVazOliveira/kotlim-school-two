@@ -1,4 +1,4 @@
-package br.dev.rvz.forum.models.dto
+package br.dev.rvz.forum.models.dto.topics
 
 import br.dev.rvz.forum.models.StatusTopic
 import java.time.LocalDateTime
