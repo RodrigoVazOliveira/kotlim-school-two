@@ -101,4 +101,9 @@ class TopicService(
             )
         )
     }
+
+    fun removeById(id: Long) {
+        val topic = getTopicById(id)
+        topics = topics.minus(topic)
+    }
 }

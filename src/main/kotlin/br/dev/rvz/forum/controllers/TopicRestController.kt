@@ -55,4 +55,11 @@ class TopicRestController(
         LOGGER.info("updateTopicById - topicUpdateRequestdto: {}", topicUpdateRequestdto)
         topicService.update(topicUpdateRequestdto)
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeTopic(@PathVariable id: Long) {
+        topicService.removeById(id)
+    }
+
 }
