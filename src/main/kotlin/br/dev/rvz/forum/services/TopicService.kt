@@ -5,6 +5,7 @@ import br.dev.rvz.forum.mappers.topics.TopicResponseListMapper
 import br.dev.rvz.forum.models.*
 import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
 import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
+import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -83,5 +84,21 @@ class TopicService(
         topics = topics.plus(topic)
 
         return topic
+    }
+
+    fun update(topicUpdateRequestdto: TopicUpdateRequestDTO) {
+        val topic = getTopicById(topicUpdateRequestdto.id)
+        topics = topics.minus(topic).plus(
+            Topic(
+                id = topic.id,
+                title = topicUpdateRequestdto.title,
+                message = topicUpdateRequestdto.message,
+                responses = topic.responses,
+                dateTimeCreated = topic.dateTimeCreated,
+                author = topic.author,
+                course = topic.course,
+                status = topic.status
+            )
+        )
     }
 }
