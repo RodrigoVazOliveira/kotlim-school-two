@@ -26,8 +26,8 @@ class TopicRestController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun list(): List<TopicResponseDTO> {
-        return topicService.list()
+    fun list(@RequestParam(required = false) nameCourse: String?): List<TopicResponseDTO> {
+        return topicService.list(nameCourse)
     }
 
     @GetMapping("/{id}")

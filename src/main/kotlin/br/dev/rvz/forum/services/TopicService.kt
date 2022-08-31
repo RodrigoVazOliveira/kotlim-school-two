@@ -19,8 +19,12 @@ class TopicService(
 ) {
 
 
-    fun list(): List<TopicResponseDTO> {
-        val topics = topicRepository.findAll()
+    fun list(nameCourse: String?): List<TopicResponseDTO> {
+        val topics = if (nameCourse != null) {
+            topicRepository.findByCourseName(nameCourse)
+        } else {
+            topicRepository.findAll()
+        }
 
         return topicResponseListMapper.map(topics)
     }
