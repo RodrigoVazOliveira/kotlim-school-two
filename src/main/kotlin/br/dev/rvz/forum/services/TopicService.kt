@@ -1,5 +1,6 @@
 package br.dev.rvz.forum.services
 
+import br.dev.rvz.forum.exceptions.NotFoundException
 import br.dev.rvz.forum.mappers.topics.TopicRequestMapper
 import br.dev.rvz.forum.mappers.topics.TopicResponseListMapper
 import br.dev.rvz.forum.models.*
@@ -69,14 +70,17 @@ class TopicService(
     }
 
     fun getTopicById(id: Long): Topic {
-        val topic = topics.first { topic -> topic.id == id }
-        return topic
+        try {
+            val topic = topics.first { topic -> topic.id == id }
+            return topic
+        } catch (e: NoSuchElementException) {
+            throw NotFoundException("topico com $id nao existe")
+        }
     }
 
     fun getResponseTopicByTopicId(id: Long): List<ResponseTopic> {
-        return topics
-            .first { topic -> topic.id == id }
-            .responses
+        val topic = getTopicById(id)
+        return topic.responses
     }
 
     fun save(topicRequestDTO: TopicRequestDTO): Topic {
