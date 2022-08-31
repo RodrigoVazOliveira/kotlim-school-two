@@ -6,6 +6,7 @@ import br.dev.rvz.forum.services.AuthorService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 
@@ -15,6 +16,7 @@ class AuthorRestController(val authorService: AuthorService) {
     val LOGGER: Logger = LoggerFactory.getLogger(this.javaClass)
 
     @PostMapping
+    @Transactional
     fun save(
         @RequestBody authorSavedDTO: AuthorSavedDTO,
         uriComponentsBuilder: UriComponentsBuilder

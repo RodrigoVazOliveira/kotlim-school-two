@@ -3,79 +3,35 @@ package br.dev.rvz.forum.services
 import br.dev.rvz.forum.exceptions.NotFoundException
 import br.dev.rvz.forum.mappers.topics.TopicRequestMapper
 import br.dev.rvz.forum.mappers.topics.TopicResponseListMapper
-import br.dev.rvz.forum.models.*
+import br.dev.rvz.forum.models.ResponseTopic
+import br.dev.rvz.forum.models.Topic
 import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
 import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
 import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
+import br.dev.rvz.forum.repositories.TopicRepository
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class TopicService(
-    private var topics: List<Topic>,
+    private val topicRepository: TopicRepository,
     private val topicRequestMapper: TopicRequestMapper,
     private val topicResponseListMapper: TopicResponseListMapper
 ) {
 
-    init {
-        val user = User(id = 1, name = "Rodrigo Vaz", email = "rodrigo@gmail.com")
-        val course = Course(id = 1, name = "Spring Boot", "Programacao")
-
-        val topic = Topic(
-            id = 1,
-            title = "Duvida em Java",
-            message = "Estou com problema em java",
-            dateTimeCreated = LocalDateTime.now(),
-            course = course,
-            author = user,
-            responses = mutableListOf(),
-            status = StatusTopic.NO_RESPONSE
-        )
-
-        val responses = ResponseTopic(
-            1,
-            "Respndido",
-            LocalDateTime.now(),
-            user,
-            topic = topic,
-            true
-        )
-        val topicTwo = Topic(
-            id = 2,
-            title = "Duvida em Java",
-            message = "Estou com problema em java",
-            dateTimeCreated = LocalDateTime.now(),
-            course = course,
-            author = user,
-            responses = mutableListOf(responses),
-            status = StatusTopic.NO_RESPONSE
-        )
-
-        val topicThree = Topic(
-            id = 3,
-            title = "Duvida em Java",
-            message = "Estou com problema em java",
-            dateTimeCreated = LocalDateTime.now(),
-            course = course,
-            author = user,
-            responses = mutableListOf(responses),
-            status = StatusTopic.NO_RESPONSE
-        )
-
-        topics = arrayListOf(topic, topicTwo, topicThree)
-    }
 
     fun list(): List<TopicResponseDTO> {
+        val topics = topicRepository.findAll()
+
         return topicResponseListMapper.map(topics)
     }
 
     fun getTopicById(id: Long): Topic {
-        try {
-            val topic = topics.first { topic -> topic.id == id }
-            return topic
-        } catch (e: NoSuchElementException) {
+        val topicOptional = topicRepository.findById(id)
+        if (topicOptional.isEmpty) {
             throw NotFoundException("topico com $id nao existe")
         }
+
+        return topicOptional.get()
     }
 
     fun getResponseTopicByTopicId(id: Long): List<ResponseTopic> {
@@ -85,29 +41,28 @@ class TopicService(
 
     fun save(topicRequestDTO: TopicRequestDTO): Topic {
         val topic = topicRequestMapper.map(topicRequestDTO)
-        topics = topics.plus(topic)
 
-        return topic
+        return topicRepository.save(topic)
     }
 
     fun update(topicUpdateRequestdto: TopicUpdateRequestDTO) {
         val topic = getTopicById(topicUpdateRequestdto.id)
-        topics = topics.minus(topic).plus(
-            Topic(
-                id = topic.id,
-                title = topicUpdateRequestdto.title,
-                message = topicUpdateRequestdto.message,
-                responses = topic.responses,
-                dateTimeCreated = topic.dateTimeCreated,
-                author = topic.author,
-                course = topic.course,
-                status = topic.status
-            )
+        val updateTopic = Topic(
+            id = topic.id,
+            title = topicUpdateRequestdto.title,
+            message = topicUpdateRequestdto.message,
+            responses = topic.responses,
+            dateTimeCreated = topic.dateTimeCreated,
+            author = topic.author,
+            course = topic.course,
+            status = topic.status
         )
+
+        topicRepository.save(updateTopic)
     }
 
     fun removeById(id: Long) {
         val topic = getTopicById(id)
-        topics = topics.minus(topic)
+        topicRepository.delete(topic)
     }
 }

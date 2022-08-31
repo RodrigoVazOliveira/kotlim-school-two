@@ -9,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 import javax.validation.Valid
@@ -21,6 +22,7 @@ class TopicResponseRestController(
     private val LOGGER: Logger = LoggerFactory.getLogger(this.javaClass)
 
     @PostMapping
+    @Transactional
     fun save(
         @PathVariable id: Long,
         @RequestBody @Valid responseTopicRequestDTO: ResponseTopicRequestDTO,
@@ -35,6 +37,7 @@ class TopicResponseRestController(
     }
 
     @PutMapping
+    @Transactional
     fun updateResponseTopic(
         @PathVariable id: Long,
         @RequestBody @Valid updateResponseTopicRequestDTO: UpdateResponseTopicRequestDTO
@@ -46,6 +49,7 @@ class TopicResponseRestController(
 
     @DeleteMapping("/{idResponseTopic}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     fun deleteById(@PathVariable id: Long, @PathVariable idResponseTopic: Long) {
         LOGGER.info("deleteById - id: $id, idResponseTopic: $idResponseTopic")
         responseTopicService.deleteById(idResponseTopic)
