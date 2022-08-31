@@ -33,6 +33,8 @@ class ResponseTopicService(
             author = responseTopic.author,
             soluction = responseTopic.soluction
         )
+        responseTopic.topic.responses.remove(responseTopic)
+        responseTopic.topic.responses.add(updateResponseTopic)
         responseTopics.minus(responseTopic)
         responseTopics.add(updateResponseTopic)
 
