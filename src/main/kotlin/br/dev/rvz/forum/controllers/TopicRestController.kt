@@ -10,14 +10,16 @@ import br.dev.rvz.forum.services.TopicService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/topics")
 class TopicRestController(
     val topicService: TopicService,
-    private val topicResponseMapper: TopicResponseMapper,
+    private val topicResponseMapper: TopicResponseMapper
 ) {
     private val LOGGER: Logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -41,10 +43,15 @@ class TopicRestController(
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    fun save(@RequestBody @Valid topicRequestDTO: TopicRequestDTO): Topic {
+    fun save(
+        @RequestBody @Valid topicRequestDTO: TopicRequestDTO,
+        uriComponentsBuilder: UriComponentsBuilder
+    ): ResponseEntity<Topic> {
         LOGGER.info("save - topicSaveDTO: {}", topicRequestDTO)
-        return topicService.save(topicRequestDTO)
+        val topic = topicService.save(topicRequestDTO)
+        val uri = uriComponentsBuilder.path("/topics/${topic.id}").build().toUri()
+
+        return ResponseEntity.created(uri).body(topic)
     }
 
     @PutMapping
