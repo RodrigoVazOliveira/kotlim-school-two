@@ -11,6 +11,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -31,7 +32,7 @@ class TopicRestController(
     @ResponseStatus(HttpStatus.OK)
     fun list(
         @RequestParam(required = false) nameCourse: String?,
-        @PageableDefault(size = 5) pagenation: Pageable
+        @PageableDefault(size = 5, sort = ["dateTimeCreated"], direction = Sort.Direction.DESC) pagenation: Pageable
     ): Page<TopicResponseDTO> {
         return topicService.list(nameCourse, pagenation)
     }
