@@ -9,6 +9,9 @@ import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
 import br.dev.rvz.forum.services.TopicService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
@@ -26,8 +29,11 @@ class TopicRestController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun list(@RequestParam(required = false) nameCourse: String?): List<TopicResponseDTO> {
-        return topicService.list(nameCourse)
+    fun list(
+        @RequestParam(required = false) nameCourse: String?,
+        @PageableDefault(size = 5) pagenation: Pageable
+    ): Page<TopicResponseDTO> {
+        return topicService.list(nameCourse, pagenation)
     }
 
     @GetMapping("/{id}")

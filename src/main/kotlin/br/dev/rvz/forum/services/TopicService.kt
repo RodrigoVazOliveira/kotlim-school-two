@@ -9,6 +9,8 @@ import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
 import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
 import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
 import br.dev.rvz.forum.repositories.TopicRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,11 +21,11 @@ class TopicService(
 ) {
 
 
-    fun list(nameCourse: String?): List<TopicResponseDTO> {
+    fun list(nameCourse: String?, pagenation: Pageable): Page<TopicResponseDTO> {
         val topics = if (nameCourse != null) {
-            topicRepository.findByCourseName(nameCourse)
+            topicRepository.findByCourseName(nameCourse, pagenation)
         } else {
-            topicRepository.findAll()
+            topicRepository.findAll(pagenation)
         }
 
         return topicResponseListMapper.map(topics)
