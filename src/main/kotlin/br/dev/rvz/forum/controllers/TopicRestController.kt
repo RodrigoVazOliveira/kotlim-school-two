@@ -9,6 +9,7 @@ import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
 import br.dev.rvz.forum.services.TopicService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -30,6 +31,7 @@ class TopicRestController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Cacheable("list_topics")
     fun list(
         @RequestParam(required = false) nameCourse: String?,
         @PageableDefault(size = 5, sort = ["dateTimeCreated"], direction = Sort.Direction.DESC) pagenation: Pageable
