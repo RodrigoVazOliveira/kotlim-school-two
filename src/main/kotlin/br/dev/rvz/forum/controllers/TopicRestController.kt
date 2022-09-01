@@ -9,6 +9,7 @@ import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
 import br.dev.rvz.forum.services.TopicService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -54,6 +55,7 @@ class TopicRestController(
 
     @PostMapping
     @Transactional
+    @CacheEvict(value = ["list_topics"], allEntries = true)
     fun save(
         @RequestBody @Valid topicRequestDTO: TopicRequestDTO,
         uriComponentsBuilder: UriComponentsBuilder
@@ -68,6 +70,7 @@ class TopicRestController(
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
+    @CacheEvict(value = ["list_topics"], allEntries = true)
     fun updateTopicById(
         @RequestBody @Valid topicUpdateRequestdto: TopicUpdateRequestDTO
     ) {
@@ -78,6 +81,7 @@ class TopicRestController(
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
+    @CacheEvict(value = ["list_topics"], allEntries = true)
     fun removeTopic(@PathVariable id: Long) {
         topicService.removeById(id)
     }
