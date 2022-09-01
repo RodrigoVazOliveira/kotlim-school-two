@@ -3,6 +3,7 @@ package br.dev.rvz.forum.controllers
 import br.dev.rvz.forum.mappers.topics.TopicResponseMapper
 import br.dev.rvz.forum.models.ResponseTopic
 import br.dev.rvz.forum.models.Topic
+import br.dev.rvz.forum.models.dto.topics.TopicReportDTO
 import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
 import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
 import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
@@ -86,4 +87,10 @@ class TopicRestController(
         topicService.removeById(id)
     }
 
+
+    @GetMapping("/reports")
+    @ResponseStatus(HttpStatus.OK)
+    fun getReportTopics(): List<TopicReportDTO> {
+        return topicService.reports()
+    }
 }

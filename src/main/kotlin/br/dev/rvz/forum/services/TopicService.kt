@@ -5,6 +5,7 @@ import br.dev.rvz.forum.mappers.topics.TopicRequestMapper
 import br.dev.rvz.forum.mappers.topics.TopicResponseListMapper
 import br.dev.rvz.forum.models.ResponseTopic
 import br.dev.rvz.forum.models.Topic
+import br.dev.rvz.forum.models.dto.topics.TopicReportDTO
 import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
 import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
 import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
@@ -70,5 +71,9 @@ class TopicService(
     fun removeById(id: Long) {
         val topic = getTopicById(id)
         topicRepository.delete(topic)
+    }
+
+    fun reports(): List<TopicReportDTO> {
+        return topicRepository.reports()
     }
 }
