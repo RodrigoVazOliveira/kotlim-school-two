@@ -11,6 +11,8 @@ data class ResponseTopic(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long?,
     val message: String,
+
+    @Column(name = "date_time_created")
     val dateTimeCreated: LocalDateTime,
 
     @ManyToOne

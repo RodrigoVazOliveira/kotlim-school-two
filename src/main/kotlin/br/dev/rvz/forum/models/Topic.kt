@@ -11,6 +11,8 @@ data class Topic(
     val id: Long? = null,
     val title: String,
     val message: String,
+
+    @Column(name = "date_time_created")
     val dateTimeCreated: LocalDateTime,
 
     @ManyToOne

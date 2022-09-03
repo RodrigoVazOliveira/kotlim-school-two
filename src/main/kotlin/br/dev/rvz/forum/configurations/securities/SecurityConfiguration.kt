@@ -18,7 +18,7 @@ class SecurityConfiguration(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeHttpRequests()
-            .antMatchers("/topics/**").hasAuthority("LEITURA_ESCRITA")
+            .antMatchers("/topics/**").hasAuthority("SOMENTE_LEITURA")
             .anyRequest()
             .authenticated()
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
