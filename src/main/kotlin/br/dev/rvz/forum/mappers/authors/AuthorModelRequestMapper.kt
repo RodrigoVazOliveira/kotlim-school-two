@@ -12,7 +12,8 @@ class AuthorModelRequestMapper : Mapper<AuthorSavedDTO, User> {
             id = null,
             name = t.name,
             email = t.email,
-            password = t.password
+            password = t.password,
+            role = listOf()
         )
     }
 }
