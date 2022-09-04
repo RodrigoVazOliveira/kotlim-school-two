@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class JWTVerifyAuthenticationFilter(
-    private val authManager: AuthenticationManager?,
+    private val authManager: AuthenticationManager,
     private val jwtGenerateToken: JWTGenerateToken
 ) : UsernamePasswordAuthenticationFilter() {
 
@@ -21,7 +21,7 @@ class JWTVerifyAuthenticationFilter(
         val credencials = ObjectMapper().readValue(request?.inputStream, Credencials::class.java)
         val token = UsernamePasswordAuthenticationToken(credencials.username, credencials.password)
 
-        return authManager!!.authenticate(token)
+        return authManager.authenticate(token)
     }
 
     override fun successfulAuthentication(

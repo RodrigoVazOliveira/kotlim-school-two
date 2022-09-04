@@ -4,28 +4,33 @@ import br.dev.rvz.forum.configurations.filters.JWTAuthenticationFilter
 import br.dev.rvz.forum.configurations.filters.JWTVerifyAuthenticationFilter
 import br.dev.rvz.forum.configurations.jwt.JWTGenerateToken
 import br.dev.rvz.forum.configurations.jwt.JWTVerifyToken
+import br.dev.rvz.forum.services.UserAuthenticationCustomService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
-import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.filter.OncePerRequestFilter
 
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
     private val jwtGenerateToken: JWTGenerateToken,
-    private val jwtVerifyToken: JWTVerifyToken
+    private val jwtVerifyToken: JWTVerifyToken,
+    private val userAuthenticationCustomService: UserAuthenticationCustomService
 ) {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
+        val authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
+        authenticationManagerBuilder.userDetailsService(userAuthenticationCustomService)
+            .passwordEncoder(getBcryptpasswordEncoder())
+        val authManager = authenticationManagerBuilder.build()
         http
             .csrf().disable()
             .authorizeHttpRequests()
@@ -33,9 +38,10 @@ class SecurityConfiguration(
             .anyRequest()
             .authenticated()
             .and()
+            .authenticationManager(authManager)
             .addFilterBefore(
                 JWTVerifyAuthenticationFilter(
-                    authManager = http.getSharedObject(AuthenticationManager::class.java),
+                    authManager = authManager,
                     jwtGenerateToken = jwtGenerateToken
                 ),
                 UsernamePasswordAuthenticationFilter().javaClass
@@ -43,7 +49,8 @@ class SecurityConfiguration(
             .addFilterBefore(
                 JWTAuthenticationFilter(
                     jwtVerify = jwtVerifyToken
-                ), OncePerRequestFilter::class.java
+                ), UsernamePasswordAuthenticationFilter().javaClass
+                //OncePerRequestFilter::class.java
             )
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         return http.build()

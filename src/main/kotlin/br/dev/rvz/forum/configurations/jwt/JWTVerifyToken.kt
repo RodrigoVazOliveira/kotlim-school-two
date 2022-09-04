@@ -2,6 +2,7 @@ package br.dev.rvz.forum.configurations.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTDecodeException
 import com.auth0.jwt.exceptions.SignatureVerificationException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -14,12 +15,13 @@ class JWTVerifyToken(
     val secretKey: String,
 ) {
     fun isValid(token: String?): Boolean {
-        val decodedJWT = JWT.decode(token)
-
         return try {
+            val decodedJWT = JWT.decode(token)
             Algorithm.HMAC512(secretKey).verify(decodedJWT)
             true
         } catch (e: SignatureVerificationException) {
+            false
+        } catch (e: JWTDecodeException) {
             false
         }
     }

@@ -16,17 +16,23 @@ class JWTAuthenticationFilter(
         filterChain: FilterChain
     ) {
         val token = request.getHeader("Authorization")
-        val jwt = getTokenDetails(token)
-        if (jwtVerify.isValid(jwt)) {
-            val authentication = jwtVerify.getAuthentication(jwt)
-            SecurityContextHolder.getContext().authentication = authentication
+        if (token != null) {
+            val jwt = getTokenDetails(token)
+            validateToken(jwt)
         }
 
         filterChain.doFilter(request, response)
     }
 
-    private fun getTokenDetails(token: String?): String? {
-        return token?.let { jwt ->
+    private fun validateToken(jwt: String?) {
+        if (jwtVerify.isValid(jwt)) {
+            val authentication = jwtVerify.getAuthentication(jwt)
+            SecurityContextHolder.getContext().authentication = authentication
+        }
+    }
+
+    private fun getTokenDetails(token: String): String {
+        return token.let { jwt ->
             jwt.startsWith("Bearer  ")
             jwt.substring(7, token.length)
         }
