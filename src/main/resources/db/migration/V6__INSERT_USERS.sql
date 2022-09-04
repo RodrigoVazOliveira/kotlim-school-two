@@ -1,4 +1,4 @@
 INSERT INTO
-    users
+    users (name, email, password)
 VALUES
-(NULL, 'Raymundo', 'raimundo@gmail.com', '$2a$12$YGdTQNw9Sudn9kr6RxPLpOt08R55XbD4IBogRQgVwKn5i92e5Zu3W')
+('Raymundo', 'raimundo@gmail.com', '$2a$12$YGdTQNw9Sudn9kr6RxPLpOt08R55XbD4IBogRQgVwKn5i92e5Zu3W')
