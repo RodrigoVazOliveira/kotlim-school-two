@@ -4,9 +4,11 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTDecodeException
 import com.auth0.jwt.exceptions.SignatureVerificationException
+import com.auth0.jwt.interfaces.DecodedJWT
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 
 @Component
@@ -29,7 +31,18 @@ class JWTVerifyToken(
     fun getAuthentication(token: String?): Authentication {
         val decodedJWT = JWT.decode(token)
         val username = decodedJWT.subject
+        val authorities: MutableList<SimpleGrantedAuthority> = getAuthories(decodedJWT)
+        
+        return UsernamePasswordAuthenticationToken(username, null, authorities)
+    }
 
-        return UsernamePasswordAuthenticationToken(username, null, null)
+    private fun getAuthories(decodedJWT: DecodedJWT): MutableList<SimpleGrantedAuthority> {
+        val roles = decodedJWT.getClaim("roles")
+        val authorities: MutableList<SimpleGrantedAuthority> = mutableListOf()
+        roles.asArray(String::class.java).forEach { role ->
+            authorities.add(SimpleGrantedAuthority(role))
+        }
+
+        return authorities
     }
 }

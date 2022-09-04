@@ -34,6 +34,7 @@ class SecurityConfiguration(
         http
             .csrf().disable()
             .authorizeHttpRequests()
+            .antMatchers("/topics").hasAuthority("LEITURA_ESCRITA")
             .antMatchers(HttpMethod.POST, "/login").permitAll()
             .anyRequest()
             .authenticated()
