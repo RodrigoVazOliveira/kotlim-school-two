@@ -1,4 +1,4 @@
-package br.dev.rvz.forum.configurations.securities
+package br.dev.rvz.forum.configurations.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class JWTUtil(
+class JWTGenerateToken(
     @Value("\${jwt.secret}")
     val secretKey: String,
 
@@ -15,7 +15,7 @@ class JWTUtil(
     val expiration: Long
 ) {
 
-    fun generateToken(username: String): String {
+    fun getToken(username: String): String {
         return JWT.create()
             .withIssuer(username)
             .withSubject(username)
