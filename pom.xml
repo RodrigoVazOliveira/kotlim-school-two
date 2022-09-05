@@ -132,7 +132,7 @@
         <profile>
             <id>dev</id>
             <properties>
-                <activatedProperties>test</activatedProperties>
+                <activatedProperties>dev</activatedProperties>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
