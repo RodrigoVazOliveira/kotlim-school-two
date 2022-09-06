@@ -13,7 +13,8 @@ class TopicResponseMapper : Mapper<Topic, TopicResponseDTO> {
             title = topic.title,
             message = topic.message,
             status = topic.status,
-            dataCreated = topic.dateTimeCreated
+            dataCreated = topic.dateTimeCreated,
+            dateUpdate = topic.dateTimeUpdate
         )
     }
 

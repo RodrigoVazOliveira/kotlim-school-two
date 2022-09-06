@@ -8,5 +8,6 @@ class TopicResponseDTO(
     val title: String,
     val message: String,
     val status: StatusTopic,
-    val dataCreated: LocalDateTime
+    val dataCreated: LocalDateTime,
+    val dateUpdate: LocalDateTime
 )

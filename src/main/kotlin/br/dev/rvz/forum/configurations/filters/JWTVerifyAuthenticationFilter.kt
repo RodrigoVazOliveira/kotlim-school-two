@@ -33,7 +33,6 @@ class JWTVerifyAuthenticationFilter(
         val user = (authResult?.principal as UserDetails)
         val token = jwtGenerateToken.getToken(user.username, user.authorities)
 
-
         response?.addHeader("Authorization", "Bearer $token")
     }
 }
