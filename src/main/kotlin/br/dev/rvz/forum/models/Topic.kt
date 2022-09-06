@@ -15,6 +15,8 @@ data class Topic(
     @Column(name = "date_time_created")
     val dateTimeCreated: LocalDateTime,
 
+    @Column(name = "date_time_update")
+    val dateTimeUpdate: LocalDateTime,
     @ManyToOne
     val course: Course,
 

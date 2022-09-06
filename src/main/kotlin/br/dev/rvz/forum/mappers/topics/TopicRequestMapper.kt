@@ -24,7 +24,8 @@ class TopicRequestMapper(
             responses = mutableListOf(),
             dateTimeCreated = LocalDateTime.now(),
             id = Random.nextLong(0, 30),
-            status = StatusTopic.NO_RESPONSE
+            status = StatusTopic.NO_RESPONSE,
+            dateTimeUpdate = LocalDateTime.now()
         )
     }
 }

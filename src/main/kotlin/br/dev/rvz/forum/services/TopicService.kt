@@ -13,6 +13,7 @@ import br.dev.rvz.forum.repositories.TopicRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class TopicService(
@@ -62,7 +63,8 @@ class TopicService(
             dateTimeCreated = topic.dateTimeCreated,
             author = topic.author,
             course = topic.course,
-            status = topic.status
+            status = topic.status,
+            dateTimeUpdate = LocalDateTime.now()
         )
 
         topicRepository.save(updateTopic)
