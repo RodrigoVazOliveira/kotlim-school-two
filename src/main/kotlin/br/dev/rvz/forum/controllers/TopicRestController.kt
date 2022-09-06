@@ -8,6 +8,7 @@ import br.dev.rvz.forum.models.dto.topics.TopicRequestDTO
 import br.dev.rvz.forum.models.dto.topics.TopicResponseDTO
 import br.dev.rvz.forum.models.dto.topics.TopicUpdateRequestDTO
 import br.dev.rvz.forum.services.TopicService
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.CacheEvict
@@ -25,6 +26,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/topics")
+@SecurityRequirement(name = "bearerAuth")
 class TopicRestController(
     val topicService: TopicService,
     private val topicResponseMapper: TopicResponseMapper

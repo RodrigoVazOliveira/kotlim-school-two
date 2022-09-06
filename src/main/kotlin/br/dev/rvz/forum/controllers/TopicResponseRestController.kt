@@ -5,6 +5,7 @@ import br.dev.rvz.forum.models.dto.responses.ResponseTopicRequestDTO
 import br.dev.rvz.forum.models.dto.responses.ResponseTopicResponseDTO
 import br.dev.rvz.forum.models.dto.responses.UpdateResponseTopicRequestDTO
 import br.dev.rvz.forum.services.ResponseTopicService
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -16,6 +17,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/topics/{id}/responses")
+@SecurityRequirement(name = "bearerAuth")
 class TopicResponseRestController(
     private val responseTopicService: ResponseTopicService
 ) {

@@ -3,6 +3,7 @@ package br.dev.rvz.forum.controllers
 import br.dev.rvz.forum.models.User
 import br.dev.rvz.forum.models.dto.AuthorSavedDTO
 import br.dev.rvz.forum.services.AuthorService
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -12,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
 @RequestMapping("/authors")
+@SecurityRequirement(name = "bearerAuth")
 class AuthorRestController(val authorService: AuthorService) {
     val LOGGER: Logger = LoggerFactory.getLogger(this.javaClass)
 
