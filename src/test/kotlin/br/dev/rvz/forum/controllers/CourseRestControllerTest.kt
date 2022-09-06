@@ -2,14 +2,17 @@ package br.dev.rvz.forum.controllers
 
 import br.dev.rvz.forum.configurations.jwt.JWTGenerateToken
 import br.dev.rvz.forum.models.UserTest
+import br.dev.rvz.forum.models.dto.CourseSaveDTO
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
@@ -25,7 +28,7 @@ internal class CourseRestControllerTest {
     private lateinit var jwtGenerateToken: JWTGenerateToken
 
     companion object {
-        private const val RESOURCE = "/topics"
+        private const val RESOURCE = "/courses"
     }
 
     @BeforeEach
@@ -39,15 +42,13 @@ internal class CourseRestControllerTest {
 
 
     @Test
-    fun `deve retornar codigo 403 quando chamar topicos sem authenticacao`() {
-        mockMvc.get(RESOURCE).andExpect { status { is4xxClientError() } }
-    }
-
-    @Test
-    fun `deve retornar codigo 200 quando chamar topicos com token`() {
+    fun `Deve cadastrar um novo curso e retornar 201`() {
+        val courseSaveDTO = CourseSaveDTO("Curso de teste", "Teste")
         val token = generateToken()
-        mockMvc.get(RESOURCE) {
-            this.headers { token?.let { this.setBearerAuth(it) } }
+        mockMvc.post(RESOURCE) {
+            headers { token?.let { this.setBearerAuth(token) } }
+            this.contentType = MediaType.APPLICATION_JSON
+            this.content = jacksonObjectMapper().writeValueAsString(courseSaveDTO)
         }.andExpect { status { is2xxSuccessful() } }
     }
 
