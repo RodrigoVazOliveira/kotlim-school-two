@@ -11,8 +11,6 @@ import br.dev.rvz.forum.services.TopicService
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.cache.annotation.CacheEvict
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -35,7 +33,6 @@ class TopicRestController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Cacheable("list_topics")
     fun list(
         @RequestParam(required = false) nameCourse: String?,
         @PageableDefault(size = 5, sort = ["dateTimeCreated"], direction = Sort.Direction.DESC) pagenation: Pageable
@@ -58,7 +55,6 @@ class TopicRestController(
 
     @PostMapping
     @Transactional
-    @CacheEvict(value = ["list_topics"], allEntries = true)
     fun save(
         @RequestBody @Valid topicRequestDTO: TopicRequestDTO,
         uriComponentsBuilder: UriComponentsBuilder
@@ -73,7 +69,6 @@ class TopicRestController(
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    @CacheEvict(value = ["list_topics"], allEntries = true)
     fun updateTopicById(
         @RequestBody @Valid topicUpdateRequestdto: TopicUpdateRequestDTO
     ) {
@@ -84,7 +79,6 @@ class TopicRestController(
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    @CacheEvict(value = ["list_topics"], allEntries = true)
     fun removeTopic(@PathVariable id: Long) {
         topicService.removeById(id)
     }
