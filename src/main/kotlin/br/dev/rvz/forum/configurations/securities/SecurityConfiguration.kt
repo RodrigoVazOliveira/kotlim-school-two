@@ -35,6 +35,7 @@ class SecurityConfiguration(
             .csrf().disable()
             .authorizeHttpRequests()
             .antMatchers("/topics").hasAuthority("LEITURA_ESCRITA")
+            .antMatchers("/topics/*/responses").hasAuthority("LEITURA_ESCRITA")
             .antMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()
             .antMatchers("/swagger-ui.html").permitAll()
             .antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()

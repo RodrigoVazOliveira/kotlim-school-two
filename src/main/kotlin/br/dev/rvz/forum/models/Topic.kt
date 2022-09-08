@@ -1,5 +1,6 @@
 package br.dev.rvz.forum.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -26,6 +27,7 @@ data class Topic(
     @Enumerated(value = EnumType.STRING)
     val status: StatusTopic,
 
+    @JsonIgnore
     @OneToMany(mappedBy = "topic")
     val responses: MutableList<ResponseTopic>
 )

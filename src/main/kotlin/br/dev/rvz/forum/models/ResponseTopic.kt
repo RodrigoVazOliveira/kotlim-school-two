@@ -1,5 +1,7 @@
 package br.dev.rvz.forum.models
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -18,6 +20,7 @@ data class ResponseTopic(
     @ManyToOne
     val author: User,
 
+    @JsonIgnore
     @ManyToOne
     val topic: Topic,
     val soluction: Boolean
