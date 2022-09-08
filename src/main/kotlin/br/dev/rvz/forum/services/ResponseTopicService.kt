@@ -8,17 +8,26 @@ import br.dev.rvz.forum.models.dto.responses.ResponseTopicRequestDTO
 import br.dev.rvz.forum.models.dto.responses.ResponseTopicResponseDTO
 import br.dev.rvz.forum.models.dto.responses.UpdateResponseTopicRequestDTO
 import br.dev.rvz.forum.repositories.ResponseTopicRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class ResponseTopicService(
     private val responseTopicRepository: ResponseTopicRepository,
     private val responseTopicRequestMapper: ResponseTopicRequestMapper,
-    private val updateResponseTopicResponseMapper: UpdateResponseTopicResponseMapper
+    private val updateResponseTopicResponseMapper: UpdateResponseTopicResponseMapper,
+    private val sendMailService: SendMailService
 ) {
+    private val LOGGER: Logger = LoggerFactory.getLogger(ResponseTopicService::class.java)
+
 
     fun save(responseTopicRequestDTO: ResponseTopicRequestDTO): ResponseTopic {
         val responseTopic = responseTopicRequestMapper.map(responseTopicRequestDTO)
+        LOGGER.info("save - responseTopic: {}", responseTopic)
+
+        val email = responseTopic.topic.author.email
+        sendMailService.notifyMail(email)
 
         return responseTopicRepository.save(responseTopic)
     }

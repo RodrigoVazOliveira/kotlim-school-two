@@ -31,7 +31,7 @@ class TopicResponseRestController(
         uriComponentsBuilder: UriComponentsBuilder
     ): ResponseEntity<ResponseTopic> {
         responseTopicRequestDTO.idTopic = id
-        LOGGER.info("save - id: $id, responseTopicRequestDTO: $responseTopicRequestDTO")
+        LOGGER.info("save - id: $id, responseTopicRequestDTO: {}", responseTopicRequestDTO)
         val responseTopic = responseTopicService.save(responseTopicRequestDTO)
         val uriLocation = uriComponentsBuilder.path("/topics/$id/responses/${responseTopic.id}").build().toUri()
 
