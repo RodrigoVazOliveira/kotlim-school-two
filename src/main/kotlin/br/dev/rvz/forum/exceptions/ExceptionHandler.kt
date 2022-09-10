@@ -22,7 +22,7 @@ class ExceptionHandler {
             path = httpRequest.servletPath
         )
     }
-
+    
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun exception(e: Exception, httpRequest: HttpServletRequest): ErrorResponseDTO {
