@@ -16,7 +16,7 @@ class ReportController(
 
     @GetMapping
     fun reportTopicByCategory(model: Model): String {
-        model.addAttribute(topicService.reports())
+        model.addAttribute("topicosPorCategorias", topicService.reports())
         return "report"
     }
 }
