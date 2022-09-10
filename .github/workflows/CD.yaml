@@ -26,7 +26,7 @@ jobs:
         run: mvn -B test
 
       - name: Run mvn clean package
-        run: mvn clean package
+        run: mvn clean package -P prod
 
       - name: Login container registry
         env:
