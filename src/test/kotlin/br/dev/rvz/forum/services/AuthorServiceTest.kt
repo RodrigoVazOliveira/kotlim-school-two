@@ -18,7 +18,7 @@ internal class AuthorServiceTest {
     private val authorRepository: AuthorRepository = mockk()
     private val authorModelRequestMapper: AuthorModelRequestMapper = mockk()
 
-    val authorService: AuthorService = AuthorService(
+    private val authorService: AuthorService = AuthorService(
         authorRepository, authorModelRequestMapper
     )
 
@@ -29,11 +29,12 @@ internal class AuthorServiceTest {
 
         every { authorRepository.save(any()) } returns userSaved
         every { authorModelRequestMapper.map(any()) } returns user
-        val actual = authorService.save(
+        authorService.save(
             AuthorSavedDTO(
                 name = "Jorge",
                 email = "jorge@gmail.com",
-                password = "123456"
+                password = "123456",
+                roles = listOf()
             )
         )
 

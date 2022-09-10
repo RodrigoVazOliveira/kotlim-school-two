@@ -3,11 +3,13 @@ package br.dev.rvz.forum.controllers
 import br.dev.rvz.forum.configurations.jwt.JWTGenerateToken
 import br.dev.rvz.forum.models.UserTest
 import br.dev.rvz.forum.models.dto.CourseSaveDTO
+import br.dev.rvz.forum.services.CourseService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers
@@ -24,6 +26,9 @@ internal class CourseRestControllerTest {
     private lateinit var webApplicationContext: WebApplicationContext
     private lateinit var mockMvc: MockMvc
 
+    @MockBean
+    private lateinit var courseService: CourseService
+
     @Autowired
     private lateinit var jwtGenerateToken: JWTGenerateToken
 
@@ -35,16 +40,17 @@ internal class CourseRestControllerTest {
     fun setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .apply<DefaultMockMvcBuilder?>(
-                SecurityMockMvcConfigurers.springSecurity()
-            ).build()
+                SecurityMockMvcConfigurers.springSecurity(),
+
+                ).build()
 
     }
-
 
     @Test
     fun `Deve cadastrar um novo curso e retornar 201`() {
         val courseSaveDTO = CourseSaveDTO("Curso de teste", "Teste")
         val token = generateToken()
+
         mockMvc.post(RESOURCE) {
             headers { token?.let { this.setBearerAuth(token) } }
             this.contentType = MediaType.APPLICATION_JSON

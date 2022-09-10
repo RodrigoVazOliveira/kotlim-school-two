@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MariaDBContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -39,12 +40,21 @@ internal class TopicRepositoryTest(
             withPassword("kotlim")
         }
 
+        @Container
+        private val redisCotnainer = GenericContainer<Nothing>(
+            "redis:latest"
+        ).apply {
+            withExposedPorts(6379)
+        }
+
         @JvmStatic
         @DynamicPropertySource
         fun properties(registry: DynamicPropertyRegistry) {
             registry.add("spring.datasource.url", mariadbContainer::getJdbcUrl)
             registry.add("spring.datasource.username", mariadbContainer::getUsername)
             registry.add("spring.datasource.password", mariadbContainer::getPassword)
+            registry.add("spring.redis.host", redisCotnainer::getHost)
+            registry.add("spring.redis.port", redisCotnainer::getFirstMappedPort)
         }
     }
 
