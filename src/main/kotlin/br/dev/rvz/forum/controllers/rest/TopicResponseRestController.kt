@@ -1,4 +1,4 @@
-package br.dev.rvz.forum.controllers
+package br.dev.rvz.forum.controllers.rest
 
 import br.dev.rvz.forum.models.ResponseTopic
 import br.dev.rvz.forum.models.dto.responses.ResponseTopicRequestDTO
